@@ -8,6 +8,11 @@ body, .app {
   background: white;
 }
 
+/*todo remove this*/
+h1 {
+  margin-top: 80px;
+}
+
 /* main page */
 
 .list-books-title {
