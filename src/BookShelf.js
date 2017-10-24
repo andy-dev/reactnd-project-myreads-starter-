@@ -2,8 +2,12 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 class BookShelf extends Component {
+  handleChange = e => {
+    console.log(e.target.value);
+    debugger;
+  };
   render() {
-    const { books } = this.props;
+    const { books, onChangeShelf } = this.props;
 
     return (
       <div className="list-books">
@@ -29,7 +33,7 @@ class BookShelf extends Component {
                             }}
                           />
                           <div className="book-shelf-changer">
-                            <select>
+                            <select onChange={e => onChangeShelf(book, e.target.value)}>
                               <option value="none" disabled>
                                 Move to...
                               </option>
@@ -86,7 +90,7 @@ class BookShelf extends Component {
                           {book.title}
                         </div>
                         {book.authors.map(author =>
-                          <div className="book-authors">
+                          <div key={author} className="book-authors">
                             {author}
                           </div>
                         )}
@@ -128,7 +132,7 @@ class BookShelf extends Component {
                           {book.title}
                         </div>
                         {book.authors.map(author =>
-                          <div className="book-authors">
+                          <div key={author} className="book-authors">
                             {author}
                           </div>
                         )}
