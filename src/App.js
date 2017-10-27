@@ -5,6 +5,8 @@ import * as BooksAPI from './BooksAPI';
 import './App.css';
 import BookShelf from './BookShelf';
 import SearchBook from './SearchBook';
+import BookShelfNav from './BookShelfNav';
+import OpenSearchButton from './OpenSearchButton';
 
 class BooksApp extends React.Component {
   state = {
@@ -29,12 +31,33 @@ class BooksApp extends React.Component {
           exact
           path="/"
           render={() =>
-            <BookShelf
-              books={this.state.books}
-              onChangeShelf={(book, value) => {
-                this.changeShelf(book, value);
-              }}
-            />}
+            <div>
+              <BookShelfNav />
+
+              <BookShelf
+                bookShelfTitle="Currently Reading"
+                books={this.state.books.filter(book => book.shelf === 'currentlyReading')}
+                onChangeShelf={(book, value) => {
+                  this.changeShelf(book, value);
+                }}
+              />
+              <BookShelf
+                bookShelfTitle="Want to Read"
+                books={this.state.books.filter(book => book.shelf === 'wantToRead')}
+                onChangeShelf={(book, value) => {
+                  this.changeShelf(book, value);
+                }}
+              />
+              <BookShelf
+                bookShelfTitle="Read"
+                books={this.state.books.filter(book => book.shelf === 'read')}
+                onChangeShelf={(book, value) => {
+                  this.changeShelf(book, value);
+                }}
+              />
+
+              <OpenSearchButton />
+            </div>}
         />
         <Route path="/search" render={({ history }) => <SearchBook />} />
       </div>
