@@ -6,11 +6,10 @@ class BookShelf extends Component {
     debugger;
   };
   render() {
-    const { books, onChangeShelf, bookShelfTitle } = this.props;
+    const { books, onChangeShelf, bookShelfTitle, valueForSelect } = this.props;
 
     return (
       <div className="list-books">
-        
         <div className="list-books-content">
           <div>
             <div className="bookshelf">
@@ -32,7 +31,10 @@ class BookShelf extends Component {
                             }}
                           />
                           <div className="book-shelf-changer">
-                            <select onChange={e => onChangeShelf(book, e.target.value)}>
+                            <select
+                              value={valueForSelect}
+                              onChange={e => onChangeShelf(book, e.target.value)}
+                            >
                               <option value="none" disabled>
                                 Move to...
                               </option>
@@ -59,9 +61,6 @@ class BookShelf extends Component {
             </div>
           </div>
         </div>
-        
-        
-        
       </div>
     );
   }

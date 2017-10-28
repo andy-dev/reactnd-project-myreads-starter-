@@ -19,9 +19,12 @@ class BooksApp extends React.Component {
     });
   }
 
-  changeShelf(book, value) {
-    console.log(book);
-    console.log(value);
+  changeShelf(book, shelf) {
+    BooksAPI.update(book, shelf).then(response => {
+      BooksAPI.getAll().then(books => {
+        this.setState({ books });
+      });
+    });
   }
 
   render() {
@@ -36,6 +39,7 @@ class BooksApp extends React.Component {
 
               <BookShelf
                 bookShelfTitle="Currently Reading"
+                valueForSelect="currentlyReading"
                 books={this.state.books.filter(book => book.shelf === 'currentlyReading')}
                 onChangeShelf={(book, value) => {
                   this.changeShelf(book, value);
@@ -43,6 +47,7 @@ class BooksApp extends React.Component {
               />
               <BookShelf
                 bookShelfTitle="Want to Read"
+                valueForSelect="wantToRead"
                 books={this.state.books.filter(book => book.shelf === 'wantToRead')}
                 onChangeShelf={(book, value) => {
                   this.changeShelf(book, value);
@@ -50,6 +55,7 @@ class BooksApp extends React.Component {
               />
               <BookShelf
                 bookShelfTitle="Read"
+                valueForSelect="read"
                 books={this.state.books.filter(book => book.shelf === 'read')}
                 onChangeShelf={(book, value) => {
                   this.changeShelf(book, value);
@@ -59,7 +65,15 @@ class BooksApp extends React.Component {
               <OpenSearchButton />
             </div>}
         />
-        <Route path="/search" render={({ history }) => <SearchBook />} />
+        <Route
+          path="/search"
+          render={({ history }) =>
+            <SearchBook
+              addToShelf={(book, value) => {
+                this.changeShelf(book, value);
+              }}
+            />}
+        />
       </div>
     );
   }
