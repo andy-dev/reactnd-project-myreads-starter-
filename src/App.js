@@ -69,6 +69,7 @@ class BooksApp extends React.Component {
           path="/search"
           render={({ history }) =>
             <SearchBook
+              booksOnShelf={this.state.books}
               addToShelf={(book, value) => {
                 this.changeShelf(book, value);
               }}

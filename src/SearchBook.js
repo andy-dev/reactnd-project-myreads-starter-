@@ -13,12 +13,29 @@ class SearchBook extends Component {
     if (query.length > 0) {
       BooksAPI.search(query).then(results => {
         if (results.length > 0) {
-          this.setState({ searchResults: results });
+          let booksToDisplay = this.checkForBookInCurrentShelves(results);
+          this.setState({ searchResults: booksToDisplay });
         } else {
           this.setState({ searchResults: [] });
         }
       });
     }
+  }
+
+  checkForBookInCurrentShelves(searchResult) {
+    return searchResult.map(bookFromSearch => {
+      let foundBookOnShelf = this.props.booksOnShelf.filter(book => {
+        return book.title === bookFromSearch.title;
+      });
+
+      if (foundBookOnShelf.length > 0) {
+        bookFromSearch['currentShelf'] = foundBookOnShelf[0].shelf;
+        return bookFromSearch;
+      } else {
+        bookFromSearch['currentShelf'] = 'none';
+        return bookFromSearch;
+      }
+    });
   }
 
   render() {
@@ -31,15 +48,6 @@ class SearchBook extends Component {
           </Link>
 
           <div className="search-books-input-wrapper">
-            {/*
-                  NOTES: The search from BooksAPI is limited to a particular set of search terms.
-                  You can find these search terms here:
-                  https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-
-                  However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-                  you don't find a specific author or title. Every search is limited by search terms.
-                */}
-
             <DebounceInput
               type="text"
               minLength={1}
@@ -65,7 +73,10 @@ class SearchBook extends Component {
                       }}
                     />
                     <div className="book-shelf-changer">
-                      <select value="none" onChange={e => addToShelf(book, e.target.value)}>
+                      <select
+                        value={book.currentShelf}
+                        onChange={e => addToShelf(book, e.target.value)}
+                      >
                         <option value="none" disabled>
                           Move to...
                         </option>
@@ -80,11 +91,12 @@ class SearchBook extends Component {
                 <div className="book-title">
                   {book.title}
                 </div>
-                {book.authors.map(author =>
-                  <div key={author} className="book-authors">
-                    {author}
-                  </div>
-                )}
+                {book.authors &&
+                  book.authors.map(author =>
+                    <div key={author} className="book-authors">
+                      {author}
+                    </div>
+                  )}
               </li>
             )}
           </ol>
